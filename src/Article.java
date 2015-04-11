@@ -50,6 +50,8 @@ public class Article {
 			} else {
 
 				G.topicFrequency.get(topic).put(words[i], new Integer(1));
+				
+				
 
 			}
 
