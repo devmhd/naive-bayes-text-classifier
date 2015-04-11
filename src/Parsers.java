@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 
 public class Parsers {
@@ -13,6 +14,8 @@ public class Parsers {
 		
 		G.topicsMap = new HashMap<String, Integer>();
 		G.topics = new String[135];
+		
+		G.topicFrequency = new ArrayList<HashMap<String, Integer>>();
 		
 		FileInputStream fstream;
 		BufferedReader br;
@@ -36,17 +39,16 @@ public class Parsers {
 			  G.topics[topicsCount] = line;
 			  
 			  topicsCount++;
+			  
+			  G.topicFrequency.add(new HashMap<String, Integer>());
 			 
 			}
 			
-			
-
+		
 			
 			br.close();
 			
 			System.out.println("## Done loading " + G.topicsMap.size() + " topics");
-			
-			
 			
 			
 		} catch (FileNotFoundException e) {
@@ -97,10 +99,10 @@ public class Parsers {
 
 			while ((line = br.readLine()) != null){
 				
-				System.out.print("" + lineCount++ + ": ");
+//				System.out.print("" + lineCount++ + ": ");
 				
-				System.out.print("" + expecting + " ");
-				System.out.println(line);
+//				System.out.print("" + expecting + " ");
+//				System.out.println(line);
 				
 				
 				if(line.isEmpty()){
@@ -127,10 +129,13 @@ public class Parsers {
 					currentArticle = new Article(topicIndex);
 					expecting = 1;
 					continue;
-				  
 				}
 				
 				if(expecting == 1){
+					
+					String nextLine;
+					while(!((nextLine = br.readLine()).isEmpty()))
+						line  = line + nextLine;
 					
 					currentArticle.setTitle(line);
 					expecting = 2;
@@ -138,6 +143,28 @@ public class Parsers {
 				}
 				
 				if(expecting == 2){
+					
+					if(G.topicsMap.containsKey(line)){
+						
+						
+						//expecting = 0;
+						G.trainingArticles.add(currentArticle);
+						System.out.println("Article added with empty body: " + G.trainingArticles.size());
+						
+						
+						
+						System.out.print("Topic: " + line);
+						
+						Integer topicIndex = G.topicsMap.get(line);
+						
+						System.out.println(" Index: " + topicIndex);
+						
+						currentArticle = new Article(topicIndex);
+						expecting = 1;
+						continue;
+						
+						
+					}
 					
 					expecting = 3;
 					continue;
@@ -181,15 +208,18 @@ public class Parsers {
 		
 		//for(int i = 0; i< G.topicsMap.size(); ++i){
 			
-			System.out.println(G.topicsMap.toString());
-		//}
+//		for (Entry<String, Integer> entry : G.topicFrequency.get(2).entrySet())
+//			{
+//			    System.out.println(entry.getKey() + "/" + entry.getValue());
+//			}
 		
 		
+		for(int i=0; i<135; ++i)
+			System.out.println("Size: " + G.topicFrequency.get(i).size());
 		
-		
-	}
+		}
 	
+//		 
 		
-	
-	
 }
+		

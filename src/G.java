@@ -9,6 +9,7 @@ public class G {
 	
 	public static ArrayList<Article> trainingArticles;
 	
+	public static ArrayList<HashMap<String, Integer>> topicFrequency;
 	
 
 }
